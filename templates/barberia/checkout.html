@@ -1,0 +1,5 @@
+{% extends 'barberia/base.html' %}
+{% block title %}Enviar solicitud | Navaja Norte{% endblock %}
+{% block content %}
+<section class="container page-section narrow-section"><a class="back-link" href="{% url 'reserva' %}">← Volver a mi solicitud</a><p class="eyebrow mt-4">ÚLTIMO PASO</p><h1>¿Dónde te contactamos?</h1><p class="muted-copy mb-4">Enviaremos la solicitud al equipo para confirmar el horario. No es una reserva confirmada aún.</p><form method="post" class="form-panel">{% csrf_token %}{% for field in form %}<div class="mb-3"><label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.errors %}<div class="field-error">{{ field.errors|striptags }}</div>{% endif %}</div>{% endfor %}<div class="totals-compact"><span>Estimación con IVA</span><strong>${{ total|floatformat:0 }}</strong></div><button class="btn btn-lime w-100" type="submit">Enviar solicitud de hora <span aria-hidden="true">↗</span></button></form></section>
+{% endblock %}

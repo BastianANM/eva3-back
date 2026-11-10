@@ -1,5 +1,0 @@
-{% extends 'barberia/base.html' %}
-{% block title %}Mi perfil | Navaja Norte{% endblock %}
-{% block content %}
-<section class="container page-section narrow-section"><p class="eyebrow">TU CUENTA</p><h1>Hola, {{ request.user.first_name|default:request.user.username }}.</h1><div class="profile-panel"><div><span>Nombre de usuario</span><strong>{{ request.user.username }}</strong></div><div><span>Nombre</span><strong>{{ request.user.get_full_name|default:'—' }}</strong></div><div><span>Correo</span><strong>{{ request.user.email|default:'—' }}</strong></div><div><span>RUT</span><strong>{{ perfil.rut|default:'—' }}</strong></div><div><span>Teléfono</span><strong>{{ perfil.telefono|default:'—' }}</strong></div><div><span>Rol</span><strong>{{ perfil.get_rol_display }}</strong></div></div><a class="btn btn-ink mt-4" href="{% url 'catalogo' %}">Ver servicios</a></section>
-{% endblock %}
