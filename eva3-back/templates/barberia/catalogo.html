@@ -1,0 +1,21 @@
+{% extends 'barberia/base.html' %}
+{% block title %}Servicios | Navaja Norte{% endblock %}
+{% block content %}
+<section class="catalog-hero"><div class="container hero-inner"><p class="eyebrow">BARBERÍA · PROVIDENCIA</p><div class="row align-items-end g-4"><div class="col-lg-7"><h1>Tu próximo<br><em>gran corte.</em></h1><p class="hero-copy">Oficio preciso, buena conversación y tiempo reservado para ti.</p></div><div class="col-lg-5 hero-note"><span class="note-number">01</span><p>Elige tu servicio, barbero y horario. Confirmaremos la solicitud contigo.</p></div></div></div></section>
+<section class="container catalog-section">
+  <form method="get" class="filter-bar row g-2 align-items-center">
+    <div class="col-lg-5"><label class="visually-hidden" for="search">Buscar</label><input id="search" class="form-control" type="search" name="q" value="{{ consulta }}" placeholder="Busca un servicio, código o detalle"></div>
+    <div class="col-sm-6 col-lg-3"><label class="visually-hidden" for="specialty">Especialidad</label><select id="specialty" class="form-select" name="especialidad"><option value="">Todas las especialidades</option>{% for especialidad in especialidades %}<option value="{{ especialidad.pk }}" {% if especialidad_seleccionada == especialidad.pk|stringformat:'s' %}selected{% endif %}>{{ especialidad.nombre }}</option>{% endfor %}</select></div>
+    <div class="col-sm-6 col-lg-2"><label class="visually-hidden" for="sort">Orden</label><select id="sort" class="form-select" name="orden"><option value="nombre" {% if orden == 'nombre' %}selected{% endif %}>Nombre</option><option value="precio" {% if orden == 'precio' %}selected{% endif %}>Menor precio</option><option value="-precio" {% if orden == '-precio' %}selected{% endif %}>Mayor precio</option><option value="duracion_minutos" {% if orden == 'duracion_minutos' %}selected{% endif %}>Duración</option></select></div>
+    <div class="col-lg-2 d-grid"><button class="btn btn-ink" type="submit">Filtrar <span aria-hidden="true">↗</span></button></div>
+  </form>
+  <div class="section-heading"><div><p class="eyebrow">CARTA DE SERVICIOS</p><h2>Elige tu ritual</h2></div><span class="result-count">{{ pagina.paginator.count }} servicios</span></div>
+  <div class="row g-3 service-grid">
+    {% for servicio in pagina %}<div class="col-md-6 col-xl-4"><article class="service-card h-100">
+      <a class="service-visual" href="{% url 'detalle_servicio' servicio.slug %}">{% if servicio.imagen %}<img src="{{ servicio.imagen.url }}" alt="{{ servicio.nombre }}">{% else %}<span class="visual-code">{{ servicio.codigo }}</span><span class="visual-line"></span>{% endif %}<span class="visual-label">{{ servicio.especialidad.nombre }}</span></a>
+      <div class="service-body"><div class="d-flex justify-content-between align-items-start gap-3"><h3><a href="{% url 'detalle_servicio' servicio.slug %}">{{ servicio.nombre }}</a></h3><span class="service-price">${{ servicio.precio|floatformat:0 }}</span></div><p>{{ servicio.descripcion|truncatewords:18 }}</p><div class="service-meta"><span>{{ servicio.duracion_minutos }} min</span><a href="{% url 'detalle_servicio' servicio.slug %}" class="text-link">Ver horarios <span aria-hidden="true">↗</span></a></div></div>
+    </article></div>{% empty %}<div class="col-12"><div class="empty-state"><span class="eyebrow">SIN RESULTADOS</span><h3>No encontramos ese servicio.</h3><p>Prueba con otro término o limpia los filtros.</p><a class="btn btn-outline-dark" href="{% url 'catalogo' %}">Ver toda la carta</a></div></div>{% endfor %}
+  </div>
+  {% if pagina.has_other_pages %}<nav class="pagination-wrap" aria-label="Paginación"><ul class="pagination">{% if pagina.has_previous %}<li class="page-item"><a class="page-link" href="?q={{ consulta|urlencode }}&especialidad={{ especialidad_seleccionada }}&orden={{ orden }}&page={{ pagina.previous_page_number }}">Anterior</a></li>{% endif %}<li class="page-item disabled"><span class="page-link">{{ pagina.number }} / {{ pagina.paginator.num_pages }}</span></li>{% if pagina.has_next %}<li class="page-item"><a class="page-link" href="?q={{ consulta|urlencode }}&especialidad={{ especialidad_seleccionada }}&orden={{ orden }}&page={{ pagina.next_page_number }}">Siguiente</a></li>{% endif %}</ul></nav>{% endif %}
+</section>
+{% endblock %}

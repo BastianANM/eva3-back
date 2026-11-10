@@ -1,0 +1,1 @@
+"""Navaja Norte barberia application."""

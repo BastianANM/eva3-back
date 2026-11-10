@@ -1,0 +1,5 @@
+{% extends 'barberia/base.html' %}
+{% block title %}Dar de baja | Navaja Norte{% endblock %}
+{% block content %}
+<section class="container page-section narrow-section"><p class="eyebrow">BAJA LÓGICA</p><h1>¿Desactivar {{ servicio.nombre }}?</h1><p class="lead-copy">El servicio dejará de aparecer en el catálogo, pero sus datos y solicitudes históricas se conservarán.</p><form method="post" class="d-flex gap-2 mt-4">{% csrf_token %}<button class="btn btn-danger" type="submit">Confirmar baja</button><a class="btn btn-outline-dark" href="{% url 'gestion_servicios' %}">Cancelar</a></form></section>
+{% endblock %}

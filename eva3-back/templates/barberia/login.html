@@ -1,0 +1,5 @@
+{% extends 'barberia/base.html' %}
+{% block title %}Ingresar | Navaja Norte{% endblock %}
+{% block content %}
+<section class="container page-section narrow-section"><p class="eyebrow">QUÉ BUENO VERTE</p><h1>Ingresa a tu cuenta.</h1><form method="post" class="form-panel">{% csrf_token %}{% if form.non_field_errors %}<div class="field-error mb-3">{{ form.non_field_errors|striptags }}</div>{% endif %}{% for field in form %}<div class="mb-3"><label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.errors %}<div class="field-error">{{ field.errors|striptags }}</div>{% endif %}</div>{% endfor %}<input type="hidden" name="next" value="{{ next }}"><button class="btn btn-lime w-100" type="submit">Ingresar</button><p class="form-footnote">¿Primera vez? <a href="{% url 'registro' %}">Crea tu cuenta</a></p></form></section>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'barberia/base.html' %}
+{% block title %}Solicitud recibida | Navaja Norte{% endblock %}
+{% block content %}
+<section class="container page-section narrow-section">
+	<div class="receipt-mark">✓</div>
+	<p class="eyebrow">SOLICITUD RECIBIDA</p>
+	<h1>Gracias, {{ solicitud.nombre_cliente }}.</h1>
+	<p class="lead-copy">Tu solicitud quedó registrada como pendiente de confirmación. El equipo se pondrá en contacto contigo.</p>
+	<div class="receipt-code"><span>Código de seguimiento</span><strong>{{ solicitud.codigo }}</strong><small>{{ solicitud.creado|date:'d/m/Y H:i' }}</small></div>
+	<div class="booking-list receipt-lines">
+		{% for detalle in solicitud.detalles.all %}
+			<article class="booking-item"><div class="booking-info"><h2>{{ detalle.servicio.nombre }}</h2><p>{{ detalle.barbero.nombre }} <span>·</span> {{ detalle.inicio|date:'l d F Y, H:i' }}</p></div><strong>${{ detalle.subtotal|floatformat:0 }}</strong></article>
+		{% endfor %}
+	</div>
+	<div class="receipt-totals">
+		<div><span>Estado</span><strong>{{ solicitud.get_estado_display }}</strong></div>
+		<div><span>Subtotal</span><strong>${{ solicitud.subtotal|floatformat:0 }}</strong></div>
+		<div><span>IVA estimado (19%)</span><strong>${{ solicitud.impuesto|floatformat:0 }}</strong></div>
+		<div class="receipt-grand-total"><span>Total estimado</span><strong>${{ solicitud.total|floatformat:0 }}</strong></div>
+	</div>
+	<a class="btn btn-ink mt-4" href="{% url 'catalogo' %}">Volver a la carta</a>
+</section>
+{% endblock %}
