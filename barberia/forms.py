@@ -12,7 +12,6 @@ class ServicioForm(forms.ModelForm):
             "especialidad",
             "codigo",
             "nombre",
-            "slug",
             "descripcion",
             "precio",
             "duracion_minutos",

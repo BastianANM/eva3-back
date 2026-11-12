@@ -9,7 +9,7 @@
     <div class="col-sm-6 col-lg-2"><label class="visually-hidden" for="sort">Orden</label><select id="sort" class="form-select" name="orden"><option value="nombre" {% if orden == 'nombre' %}selected{% endif %}>Nombre</option><option value="precio" {% if orden == 'precio' %}selected{% endif %}>Menor precio</option><option value="-precio" {% if orden == '-precio' %}selected{% endif %}>Mayor precio</option><option value="duracion_minutos" {% if orden == 'duracion_minutos' %}selected{% endif %}>Duración</option></select></div>
     <div class="col-lg-2 d-grid"><button class="btn btn-ink" type="submit">Filtrar <span aria-hidden="true">↗</span></button></div>
   </form>
-  <div class="section-heading"><div><p class="eyebrow">CARTA DE SERVICIOS</p><h2>Elige tu ritual</h2></div><span class="result-count">{{ pagina.paginator.count }} servicios</span></div>
+  <div class="section-heading"><div><p class="eyebrow">CARTA DE SERVICIOS</p><h2>Elige tu corte</h2></div><span class="result-count">{{ pagina.paginator.count }} servicios</span></div>
   <div class="row g-3 service-grid">
     {% for servicio in pagina %}<div class="col-md-6 col-xl-4"><article class="service-card h-100">
       <a class="service-visual" href="{% url 'detalle_servicio' servicio.slug %}">{% if servicio.imagen %}<img src="{{ servicio.imagen.url }}" alt="{{ servicio.nombre }}">{% else %}<span class="visual-code">{{ servicio.codigo }}</span><span class="visual-line"></span>{% endif %}<span class="visual-label">{{ servicio.especialidad.nombre }}</span></a>

@@ -1,7 +1,7 @@
 import uuid
 from datetime import timedelta
 from decimal import Decimal, ROUND_HALF_UP
-
+from django.utils.text import slugify
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -44,17 +44,53 @@ class Servicio(models.Model):
         DISPONIBLE = "disponible", "Disponible"
         SUSPENDIDO = "suspendido", "Suspendido"
 
-    especialidad = models.ForeignKey(Especialidad, on_delete=models.PROTECT, related_name="servicios")
+    especialidad = models.ForeignKey(
+        Especialidad,
+        on_delete=models.PROTECT,
+        related_name="servicios"
+    )
+
     codigo = models.CharField(max_length=20, unique=True)
     nombre = models.CharField(max_length=120)
     slug = models.SlugField(max_length=140, unique=True)
     descripcion = models.TextField()
-    precio = models.DecimalField(max_digits=9, decimal_places=0, validators=[MinValueValidator(0)])
-    duracion_minutos = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
-    estado = models.CharField(max_length=12, choices=Estado.choices, default=Estado.DISPONIBLE)
+
+    precio = models.DecimalField(
+        max_digits=9,
+        decimal_places=0,
+        validators=[MinValueValidator(0)]
+    )
+
+    duracion_minutos = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(1)]
+    )
+
+    estado = models.CharField(
+        max_length=12,
+        choices=Estado.choices,
+        default=Estado.DISPONIBLE
+    )
+
     imagen = models.ImageField(upload_to="servicios/", blank=True)
     activo = models.BooleanField(default=True)
     creado = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.nombre)
+            slug = base_slug
+            contador = 1
+
+            while Servicio.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base_slug}-{contador}"
+                contador += 1
+
+            self.slug = slug
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.nombre} ({self.codigo})"
 
     class Meta:
         ordering = ["nombre"]
